@@ -6,6 +6,10 @@ import json
 import csv
 from tkinter import messagebox
 
+with open('request_tracker.csv','w',newline='') as fp:
+    '''Opens csv and writes write headers'''
+    write = csv.writer(fp)
+    write.writerow(['City','Temperature(C)','Pressure','Humidity'])
 
 
 '''Producing graphical user interface by making root object using Tk class'''
@@ -37,8 +41,12 @@ city_name_label.grid(row=5,column=3,pady=30)
 city_temp.grid(row=6,column=3)
 city_pressure.grid(row=7,column=3)
 city_humidity.grid(row=8,column=3)
-
-
+def add_info_into_csv(cityName,cityTemp,cityPressure,cityHumidity):  
+  '''appends csv every time a user requests a city'''
+  with open('request_tracker.csv','a',newline='') as fp:
+    write = csv.writer(fp)
+    write.writerow([cityName,cityTemp,cityPressure,cityHumidity])    
+    
 def get_info(event):
   '''Gets info'''
   city_name = city_entry.get()
@@ -59,6 +67,7 @@ def get_info(event):
     city_temp.config(text="Temprature:"+str(cityTemp))
     city_pressure.config(text="Pressure:"+str(cityPressure))
     city_humidity.config(text="Humidity:"+ str(cityHumidity))
+    add_info_into_csv(cityName,cityTemp,cityPressure,cityHumidity) # method that open and appends city data everytime a user requests
   except:
     '''Exception block triggered if their is an exception in the try block. Excpetion triggers warning message box '''
     messagebox.showwarning('Invalid city name inputted')
